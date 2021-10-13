@@ -7,7 +7,7 @@ pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
 // This is class that describes you smart contract.
-contract multiplire {
+contract production {
     // Contract can have an instance variables.
     // In this example instance variable `timestamp` is used to store the time of `constructor` or `touch`
     // function call
@@ -27,16 +27,16 @@ contract multiplire {
         // messages, which bring no value (henceno gas) with themselves.
         tvm.accept();
     }
+    
+    modifier checkOwnerAndAccept {
+        require(msg.pubkey() == tvm.pubkey(), 102);
+        tvm.accept();
+        _;
+    }
 
-	modifier checkOwnerAndAccept{
-		require(msg.pubkey() == tvm.pubkey(), 102);
-		tvm.accept();
-		_;
-	}
-
-	function multiply(uint value) public checkOwnerAndAccept
+    function multiply(uint value) public checkOwnerAndAccept
     {
-        require(value >= 1 && value <= 10, 101, "Value not included in range [1, 10]");
+        require(value >= 1 && value <= 10, 101, "Value not included in range [0, 10]");
         prod *= value;
     }
 }

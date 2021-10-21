@@ -1,0 +1,52 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "addToken",
+			"inputs": [
+				{"name":"name","type":"string"},
+				{"name":"description","type":"string"},
+				{"name":"image","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTokenOnSell",
+			"inputs": [
+				{"name":"tokenId","type":"uint256"},
+				{"name":"price","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tokens",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"token_name","type":"string"},{"name":"image","type":"string"},{"name":"description","type":"string"},{"name":"isSelling","type":"bool"},{"name":"price","type":"uint256"}],"name":"tokens","type":"tuple[]"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"components":[{"name":"token_name","type":"string"},{"name":"image","type":"string"},{"name":"description","type":"string"},{"name":"isSelling","type":"bool"},{"name":"price","type":"uint256"}],"name":"tokens","type":"tuple[]"},
+		{"name":"tokensToOwners","type":"map(uint256,uint256)"}
+	]
+}

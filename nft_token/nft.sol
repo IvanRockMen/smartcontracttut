@@ -7,11 +7,22 @@ pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
 // This is class that describes you smart contract.
-contract wallet {
+contract nft {
     // Contract can have an instance variables.
     // In this example instance variable `timestamp` is used to store the time of `constructor` or `touch`
     // function call
+    struct Token
+    {
+        string token_name;
+        string image;
+        string description;
+        bool isSelling;
+        uint price;
+    }
 
+    Token[] public tokens;
+
+    mapping(uint => uint) tokensToOwners;
     // Contract can have a `constructor` – function that will be called when contract will be deployed to the blockchain.
     // In this example constructor adds current time to the instance variable.
     // All contracts need call tvm.accept(); for succeeded deploy
@@ -25,29 +36,34 @@ contract wallet {
         // current transaction. This actions required to process external
         // messages, which bring no value (henceno gas) with themselves.
         tvm.accept();
-
     }
 
     modifier checkOwnerAndAccept
     {
         require(msg.pubkey() == tvm.pubkey(), 102);
-        tvm.accept();
         _;
     }
 
-    function sendTransaction(address dest, uint128 amount, bool payCommisionFromTransaction) public pure checkOwnerAndAccept
+    modifier checkName(string name)
     {
-        uint16 flag = 0;
-        if(!payCommisionFromTransaction)
+        for(uint i = 0; i < tokens.length; i++)
         {
-            flag = 1;
+            require(tokens[i].token_name != name, 102, "This name is exists");
         }
-        dest.transfer(amount, true, flag);
+        _;
     }
 
-    function sendAllCrystalAndDestroy(address dest) public pure checkOwnerAndAccept
+    function addToken(string name, string description, string image) public checkOwnerAndAccept checkName(name)
     {
-        uint16 flag = 128+32;
-        dest.transfer(0, true, flag);
+        tvm.accept();
+        tokens.push(Token(name, image, description, false, 0));
+        tokensToOwners[msg.pubkey()] = tokens.length-1;
+    }
+
+    function setTokenOnSell(uint tokenId, uint price) public checkOwnerAndAccept
+    {
+        tvm.accept();
+        tokens[tokenId].isSelling = true;
+        tokens[tokenId].price = price;
     }
 }

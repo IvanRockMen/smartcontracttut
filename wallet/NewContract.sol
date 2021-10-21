@@ -7,10 +7,11 @@ pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
 // This is class that describes you smart contract.
-contract wallet {
+contract NewContract {
     // Contract can have an instance variables.
     // In this example instance variable `timestamp` is used to store the time of `constructor` or `touch`
     // function call
+    uint32 public timestamp;
 
     // Contract can have a `constructor` – function that will be called when contract will be deployed to the blockchain.
     // In this example constructor adds current time to the instance variable.
@@ -26,28 +27,28 @@ contract wallet {
         // messages, which bring no value (henceno gas) with themselves.
         tvm.accept();
 
+        timestamp = now;
     }
 
-    modifier checkOwnerAndAccept
-    {
+    function renderHelloWorld () public pure returns (string) {
+        return 'helloWorld';
+    }
+
+    // Updates variable `timestamp` with current blockchain time.
+    function touch() external {
+        // Each function that accepts external message must check that
+        // message is correctly signed.
+        require(msg.pubkey() == tvm.pubkey(), 102);
+        // Tells to the TVM that we accept this message.
+        tvm.accept();
+        // Update timestamp
+        timestamp = now;
+    }
+
+    function sendValue(address dest, uint128 amount, bool bounce) public view {
         require(msg.pubkey() == tvm.pubkey(), 102);
         tvm.accept();
-        _;
-    }
-
-    function sendTransaction(address dest, uint128 amount, bool payCommisionFromTransaction) public pure checkOwnerAndAccept
-    {
-        uint16 flag = 0;
-        if(!payCommisionFromTransaction)
-        {
-            flag = 1;
-        }
-        dest.transfer(amount, true, flag);
-    }
-
-    function sendAllCrystalAndDestroy(address dest) public pure checkOwnerAndAccept
-    {
-        uint16 flag = 128+32;
-        dest.transfer(0, true, flag);
+        // It allows to make a transfer with arbitrary settings
+        dest.transfer(amount, bounce, 0);
     }
 }

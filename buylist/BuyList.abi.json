@@ -1,0 +1,43 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "addItem",
+			"inputs": [
+				{"name":"name","type":"bytes"},
+				{"name":"count","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deleteItem",
+			"inputs": [
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "makeBuy",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"price","type":"uint256"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}
